@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.demo20.controller.SudokuController">
+    <top>
+        <VBox alignment="CENTER" spacing="10.0" BorderPane.alignment="CENTER">
+            <children>
+                <!-- Título del juego -->
+                <Label alignment="CENTER" text="SUDOKU 6x6" textFill="#2c3e50">
+                    <font>
+                        <Font name="System Bold" size="28.0" />
+                    </font>
+                </Label>
+
+                <!-- Instrucciones -->
+                <Label alignment="CENTER" text="Complete la cuadrícula con números del 1 al 6. Cada fila, columna y bloque 2x3 debe contener todos los números sin repetir." textFill="#34495e" wrapText="true">
+                    <font>
+                        <Font size="12.0" />
+                    </font>
+                </Label>
+            </children>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+        </VBox>
+    </top>
+
+    <center>
+        <!-- Contenedor principal del tablero -->
+        <VBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
+            <children>
+                <!-- Tablero de Sudoku 6x6 -->
+                <GridPane fx:id="sudokuGrid" alignment="CENTER" gridLinesVisible="true" hgap="2.0" vgap="2.0" style="-fx-background-color: #2c3e50; -fx-padding: 5;">
+                    <children>
+                        <!-- Fila 0 -->
+                        <TextField fx:id="cell00" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #2c3e50; -fx-border-width: 2; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <TextField fx:id="cell01" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #2c3e50; -fx-border-width: 2; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                        <TextField fx:id="cell02" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #3498db; -fx-border-width: 3; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                        <TextField fx:id="cell03" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #3498db; -fx-border-width: 3; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="3" GridPane.rowIndex="0" />
+                        <TextField fx:id="cell04" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #2c3e50; -fx-border-width: 2; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="4" GridPane.rowIndex="0" />
+                        <TextField fx:id="cell05" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #2c3e50; -fx-border-width: 2; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="5" GridPane.rowIndex="0" />
+
+                        <!-- Fila 1 -->
+                        <TextField fx:id="cell10" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #2c3e50; -fx-border-width: 2; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <TextField fx:id="cell11" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #2c3e50; -fx-border-width: 2; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <TextField fx:id="cell12" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #3498db; -fx-border-width: 3; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                        <TextField fx:id="cell13" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #3498db; -fx-border-width: 3; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                        <TextField fx:id="cell14" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #2c3e50; -fx-border-width: 2; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="4" GridPane.rowIndex="1" />
+                        <TextField fx:id="cell15" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #2c3e50; -fx-border-width: 2; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="5" GridPane.rowIndex="1" />
+
+                        <!-- Fila 2 -->
+                        <TextField fx:id="cell20" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #2c3e50; -fx-border-width: 2; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                        <TextField fx:id="cell21" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #2c3e50; -fx-border-width: 2; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                        <TextField fx:id="cell22" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #3498db; -fx-border-width: 3; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                        <TextField fx:id="cell23" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #3498db; -fx-border-width: 3; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="3" GridPane.rowIndex="2" />
+                        <TextField fx:id="cell24" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #2c3e50; -fx-border-width: 2; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="4" GridPane.rowIndex="2" />
+                        <TextField fx:id="cell25" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #2c3e50; -fx-border-width: 2; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="5" GridPane.rowIndex="2" />
+
+                        <!-- Fila 3 -->
+                        <TextField fx:id="cell30" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #e74c3c; -fx-border-width: 3; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                        <TextField fx:id="cell31" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #e74c3c; -fx-border-width: 3; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                        <TextField fx:id="cell32" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #2c3e50; -fx-border-width: 2; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                        <TextField fx:id="cell33" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #2c3e50; -fx-border-width: 2; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                        <TextField fx:id="cell34" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #e74c3c; -fx-border-width: 3; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="4" GridPane.rowIndex="3" />
+                        <TextField fx:id="cell35" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #e74c3c; -fx-border-width: 3; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="5" GridPane.rowIndex="3" />
+
+                        <!-- Fila 4 -->
+                        <TextField fx:id="cell40" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #e74c3c; -fx-border-width: 3; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                        <TextField fx:id="cell41" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #e74c3c; -fx-border-width: 3; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                        <TextField fx:id="cell42" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #2c3e50; -fx-border-width: 2; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                        <TextField fx:id="cell43" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #2c3e50; -fx-border-width: 2; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="3" GridPane.rowIndex="4" />
+                        <TextField fx:id="cell44" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #e74c3c; -fx-border-width: 3; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+                        <TextField fx:id="cell45" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #e74c3c; -fx-border-width: 3; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="5" GridPane.rowIndex="4" />
+
+                        <!-- Fila 5 -->
+                        <TextField fx:id="cell50" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #e74c3c; -fx-border-width: 3; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                        <TextField fx:id="cell51" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #e74c3c; -fx-border-width: 3; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+                        <TextField fx:id="cell52" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #2c3e50; -fx-border-width: 2; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="2" GridPane.rowIndex="5" />
+                        <TextField fx:id="cell53" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #2c3e50; -fx-border-width: 2; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="3" GridPane.rowIndex="5" />
+                        <TextField fx:id="cell54" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #e74c3c; -fx-border-width: 3; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="4" GridPane.rowIndex="5" />
+                        <TextField fx:id="cell55" alignment="CENTER" prefHeight="50.0" prefWidth="50.0" style="-fx-border-color: #e74c3c; -fx-border-width: 3; -fx-background-color: white; -fx-font-size: 16; -fx-font-weight: bold;" GridPane.columnIndex="5" GridPane.rowIndex="5" />
+                    </children>
+                </GridPane>
+
+                <!-- Mensaje de estado -->
+                <Label fx:id="statusLabel" alignment="CENTER" text="¡Bienvenido al Sudoku! Haz clic en 'Nuevo Juego' para comenzar." textFill="#7f8c8d">
+                    <font>
+                        <Font size="14.0" />
+                    </font>
+                </Label>
+            </children>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+        </VBox>
+    </center>
+
+    <bottom>
+        <!-- Panel de controles -->
+        <VBox alignment="CENTER" spacing="15.0" style="-fx-background-color: #ecf0f1;" BorderPane.alignment="CENTER">
+            <children>
+                <!-- Botones principales -->
+                <HBox alignment="CENTER" spacing="20.0">
+                    <children>
+                        <Button fx:id="newGameButton" mnemonicParsing="false" onAction="#handleNewGame" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #27ae60; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" text="Nuevo Juego">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Button>
+
+                        <Button fx:id="helpButton" mnemonicParsing="false" onAction="#handleHelp" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #3498db; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" text="Ayuda">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Button>
+
+                        <Button fx:id="validateButton" mnemonicParsing="false" onAction="#handleValidate" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #e67e22; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" text="Validar">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Button>
+
+                        <Button fx:id="clearButton" mnemonicParsing="false" onAction="#handleClear" prefHeight="40.0" prefWidth="120.0" style="-fx-background-color: #e74c3c; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5;" text="Limpiar">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Button>
+                    </children>
+                </HBox>
+
+                <!-- Información adicional -->
+                <HBox alignment="CENTER" spacing="30.0">
+                    <children>
+                        <Label text="Ayudas restantes:" textFill="#2c3e50">
+                            <font>
+                                <Font size="12.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="hintsLabel" text="3" textFill="#e74c3c">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+
+                        <Region prefWidth="50.0" />
+
+                        <Label text="Tiempo:" textFill="#2c3e50">
+                            <font>
+                                <Font size="12.0" />
+                            </font>
+                        </Label>
+                        <Label fx:id="timeLabel" text="00:00" textFill="#27ae60">
+                            <font>
+                                <Font name="System Bold" size="12.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </HBox>
+            </children>
+            <padding>
+                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+            </padding>
+        </VBox>
+    </bottom>
+</BorderPane>
