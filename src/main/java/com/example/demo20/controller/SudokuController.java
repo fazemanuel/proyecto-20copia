@@ -100,7 +100,7 @@ public class SudokuController implements Initializable {
     }
 
     private void setupTimer() {
-        timer = new Timeline(new KeyFrame(Duration.seconds(1), e -> updateTimer()));
+        timer = new Timeline(new KeyFrame(Duration.seconds(1), e -> updateTimer()));//se ejecuta cada segundo
         timer.setCycleCount(Timeline.INDEFINITE);
     }
 
@@ -324,9 +324,9 @@ public class SudokuController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText(message);
 
-        alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
-        ((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText("Aceptar");
-        ((Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL)).setText("Cancelar");
+        //alert.getButtonTypes().setAll(ButtonType.OK, ButtonType.CANCEL);
+        //((Button) alert.getDialogPane().lookupButton(ButtonType.OK)).setText("Aceptar");
+        //((Button) alert.getDialogPane().lookupButton(ButtonType.CANCEL)).setText("Cancelar");
 
         return alert.showAndWait();
     }

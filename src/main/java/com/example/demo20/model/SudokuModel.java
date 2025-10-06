@@ -101,7 +101,7 @@ public class SudokuModel {
             return false;
         }
 
-        int originalValue = grid[row][col];//guarda el valor original, si tiene valor es porque se le cambio el valor inicial
+        int originalValue = grid[row][col];//guarda el valor original, si tiene valor es porque se le dio un valor inicial
         grid[row][col] = 0;
 
         //para que no se repita un valoe inicial en la fila que se va a colocar otro
@@ -141,6 +141,7 @@ public class SudokuModel {
             return false;
         }
 
+        //permite operaciones que borran numeros, osea que su valor es 0
         if (value == 0) {
             grid[row][col] = 0;
             errorCells[row][col] = false;
@@ -216,6 +217,7 @@ public class SudokuModel {
             List<int[]> positions = new ArrayList<>();
 
             // Recolectar valores del bloque 3x2
+            //+2 y +3 porque cada bloque va hasta +2 filas y +3 columnas
             for (int r = startRow; r < startRow + 2; r++) {
                 for (int c = startCol; c < startCol + 3; c++) {
                     int value = grid[r][c];
