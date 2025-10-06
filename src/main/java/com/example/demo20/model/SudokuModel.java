@@ -11,8 +11,10 @@ public class SudokuModel {
     private static final int BLOCK_HEIGHT = 2;
     private static final int MIN_VALUE = 1;
     private static final int MAX_VALUE = 6;
+    private static final int MAX_SELECTION_ATTEMPTS = 500;
 
     private int[][] grid;
+    private int[][] solutionGrid; // Guardar la solución completa
     private boolean[][] initialCells;
     private boolean[][] errorCells;
     private int hintsRemaining;
@@ -21,6 +23,7 @@ public class SudokuModel {
 
     public SudokuModel() {
         this.grid = new int[GRID_SIZE][GRID_SIZE];
+        this.solutionGrid = new int[GRID_SIZE][GRID_SIZE];
         this.initialCells = new boolean[GRID_SIZE][GRID_SIZE];
         this.errorCells = new boolean[GRID_SIZE][GRID_SIZE];
         this.hintsRemaining = 3;
@@ -47,53 +50,234 @@ public class SudokuModel {
     }
 
     private void generateInitialBoard() {
+        System.out.println("Generando Sudoku con solución única...");
+
+        // Paso 1: Generar UNA solución completa y válida
+        generateCompleteSolution();
+
+        // Paso 2: Guardar la solución completa
+        for (int i = 0; i < GRID_SIZE; i++) {
+            System.arraycopy(grid[i], 0, solutionGrid[i], 0, GRID_SIZE);
+        }
+
+        // Paso 3: Intentar diferentes selecciones de celdas iniciales
+        int attempts = 0;
+        boolean foundUnique = false;
+
+        while (!foundUnique && attempts < MAX_SELECTION_ATTEMPTS) {
+            attempts++;
+
+            // Restaurar la solución completa al grid
+            for (int i = 0; i < GRID_SIZE; i++) {
+                System.arraycopy(solutionGrid[i], 0, grid[i], 0, GRID_SIZE);
+            }
+
+            // Limpiar marcas de celdas iniciales
+            for (int i = 0; i < GRID_SIZE; i++) {
+                for (int j = 0; j < GRID_SIZE; j++) {
+                    initialCells[i][j] = false;
+                }
+            }
+
+            // Seleccionar 2 números por cada bloque 3x2
+            selectInitialCells();
+
+            // Verificar si tiene solución única
+            if (hasUniqueSolution()) {
+                foundUnique = true;
+                System.out.println("✓ Sudoku con solución única encontrado en intento #" + attempts);
+            }
+        }
+
+        if (!foundUnique) {
+            System.out.println("⚠ No se encontró solución única en " + attempts + " intentos. Usando el último generado.");
+        }
+    }
+
+    private void selectInitialCells() {
         Random random = new Random();
 
         int[][] blockStarts = {
-                {0, 0}, {0, 3},
-                {2, 0}, {2, 3},
-                {4, 0}, {4, 3}
+                {0, 0}, {0, 3},  // Bloques superiores
+                {2, 0}, {2, 3},  // Bloques medios
+                {4, 0}, {4, 3}   // Bloques inferiores
         };
 
+        // Para cada bloque, seleccionar 2 posiciones aleatorias
         for (int[] blockStart : blockStarts) {
             int startRow = blockStart[0];
             int startCol = blockStart[1];
 
-            Set<Integer> usedNumbers = new HashSet<>();
-            List<int[]> availablePositions = new ArrayList<>();
+            // Crear lista de todas las posiciones en este bloque
+            List<int[]> blockPositions = new ArrayList<>();
+            for (int r = startRow; r < startRow + BLOCK_HEIGHT; r++) {
+                for (int c = startCol; c < startCol + BLOCK_WIDTH; c++) {
+                    blockPositions.add(new int[]{r, c});
+                }
+            }
 
-            availablePositions.add(new int[]{startRow, startCol});
-            availablePositions.add(new int[]{startRow, startCol + 1});
-            availablePositions.add(new int[]{startRow, startCol + 2});
-            availablePositions.add(new int[]{startRow + 1, startCol});
-            availablePositions.add(new int[]{startRow + 1, startCol + 1});
-            availablePositions.add(new int[]{startRow + 1, startCol + 2});
+            // Mezclar y seleccionar las primeras 2 posiciones
+            Collections.shuffle(blockPositions, random);
 
-            for (int count = 0; count < 2; count++) {
-                int attempts = 0;
-                boolean numberPlaced = false;
+            for (int i = 0; i < 2; i++) {
+                int[] pos = blockPositions.get(i);
+                initialCells[pos[0]][pos[1]] = true;
+            }
+        }
 
-                while (!numberPlaced && attempts < 50) {
-                    if (availablePositions.isEmpty()) break;
-
-                    int posIndex = random.nextInt(availablePositions.size());
-                    int[] position = availablePositions.get(posIndex);
-                    int row = position[0];
-                    int col = position[1];
-
-                    int number = random.nextInt(6) + 1;
-
-                    if (!usedNumbers.contains(number) && isValidPlacement(row, col, number)) {
-                        grid[row][col] = number;
-                        initialCells[row][col] = true;
-                        usedNumbers.add(number);
-                        availablePositions.remove(posIndex);
-                        numberPlaced = true;
-                    }
-                    attempts++;
+        // Limpiar las celdas que no son iniciales (ocultarlas)
+        for (int row = 0; row < GRID_SIZE; row++) {
+            for (int col = 0; col < GRID_SIZE; col++) {
+                if (!initialCells[row][col]) {
+                    grid[row][col] = 0;
                 }
             }
         }
+    }
+
+    /**
+     * Verifica si el tablero actual tiene exactamente una solución única
+     */
+    private boolean hasUniqueSolution() {
+        int[][] gridCopy = copyGrid();
+        int solutionCount = countSolutions(gridCopy, 0, 0, 0);
+        return solutionCount == 1;
+    }
+
+    /**
+     * Cuenta el número de soluciones posibles del tablero usando backtracking
+     */
+    private int countSolutions(int[][] tempGrid, int row, int col, int count) {
+        // Optimización: si ya encontramos más de 1 solución, detener
+        if (count > 1) {
+            return count;
+        }
+
+        // Si llegamos al final del tablero, encontramos una solución
+        if (row == GRID_SIZE) {
+            return count + 1;
+        }
+
+        // Calcular siguiente posición
+        int nextRow = (col == GRID_SIZE - 1) ? row + 1 : row;
+        int nextCol = (col == GRID_SIZE - 1) ? 0 : col + 1;
+
+        // Si la celda ya tiene un valor, pasar a la siguiente
+        if (tempGrid[row][col] != 0) {
+            return countSolutions(tempGrid, nextRow, nextCol, count);
+        }
+
+        // Probar todos los números posibles
+        for (int num = MIN_VALUE; num <= MAX_VALUE; num++) {
+            if (isValidPlacementInGrid(tempGrid, row, col, num)) {
+                tempGrid[row][col] = num;
+                count = countSolutions(tempGrid, nextRow, nextCol, count);
+                tempGrid[row][col] = 0; // Backtrack
+
+                // Si ya encontramos múltiples soluciones, no seguir buscando
+                if (count > 1) {
+                    return count;
+                }
+            }
+        }
+
+        return count;
+    }
+
+    /**
+     * Valida si un número puede colocarse en una posición específica de un grid temporal
+     */
+    private boolean isValidPlacementInGrid(int[][] tempGrid, int row, int col, int number) {
+        // Verificar fila
+        for (int c = 0; c < GRID_SIZE; c++) {
+            if (c != col && tempGrid[row][c] == number) {
+                return false;
+            }
+        }
+
+        // Verificar columna
+        for (int r = 0; r < GRID_SIZE; r++) {
+            if (r != row && tempGrid[r][col] == number) {
+                return false;
+            }
+        }
+
+        // Verificar bloque 3x2
+        int blockStartRow = (row / BLOCK_HEIGHT) * BLOCK_HEIGHT;
+        int blockStartCol = (col / BLOCK_WIDTH) * BLOCK_WIDTH;
+
+        for (int r = blockStartRow; r < blockStartRow + BLOCK_HEIGHT; r++) {
+            for (int c = blockStartCol; c < blockStartCol + BLOCK_WIDTH; c++) {
+                if ((r != row || c != col) && tempGrid[r][c] == number) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Crea una copia del grid actual
+     */
+    private int[][] copyGrid() {
+        int[][] copy = new int[GRID_SIZE][GRID_SIZE];
+        for (int i = 0; i < GRID_SIZE; i++) {
+            System.arraycopy(grid[i], 0, copy[i], 0, GRID_SIZE);
+        }
+        return copy;
+    }
+
+    /**
+     * Genera un tablero de Sudoku 6x6 completo y válido usando backtracking
+     */
+    private void generateCompleteSolution() {
+        // Limpiar el tablero
+        for (int i = 0; i < GRID_SIZE; i++) {
+            for (int j = 0; j < GRID_SIZE; j++) {
+                grid[i][j] = 0;
+            }
+        }
+
+        // Llenar con backtracking
+        fillGridRandomized(0, 0);
+    }
+
+    /**
+     * Llena el tablero recursivamente con números aleatorios válidos
+     */
+    private boolean fillGridRandomized(int row, int col) {
+        // Si llegamos al final del tablero, hemos terminado
+        if (row == GRID_SIZE) {
+            return true;
+        }
+
+        // Calcular la siguiente posición
+        int nextRow = (col == GRID_SIZE - 1) ? row + 1 : row;
+        int nextCol = (col == GRID_SIZE - 1) ? 0 : col + 1;
+
+        // Crear lista de números del 1 al 6 en orden aleatorio
+        List<Integer> numbers = new ArrayList<>();
+        for (int i = MIN_VALUE; i <= MAX_VALUE; i++) {
+            numbers.add(i);
+        }
+        Collections.shuffle(numbers, new Random());
+
+        // Probar cada número en orden aleatorio
+        for (int num : numbers) {
+            if (isValidPlacement(row, col, num)) {
+                grid[row][col] = num;
+
+                if (fillGridRandomized(nextRow, nextCol)) {
+                    return true;
+                }
+
+                // Backtrack
+                grid[row][col] = 0;
+            }
+        }
+
+        return false;
     }
 
     public boolean isValidPlacement(int row, int col, int number) {
@@ -101,10 +285,10 @@ public class SudokuModel {
             return false;
         }
 
-        int originalValue = grid[row][col];//guarda el valor original, si tiene valor es porque se le dio un valor inicial
+        int originalValue = grid[row][col];
         grid[row][col] = 0;
 
-        //para que no se repita un valoe inicial en la fila que se va a colocar otro
+        // Verificar fila
         for (int c = 0; c < GRID_SIZE; c++) {
             if (grid[row][c] == number) {
                 grid[row][col] = originalValue;
@@ -112,7 +296,7 @@ public class SudokuModel {
             }
         }
 
-
+        // Verificar columna
         for (int r = 0; r < GRID_SIZE; r++) {
             if (grid[r][col] == number) {
                 grid[row][col] = originalValue;
@@ -120,6 +304,7 @@ public class SudokuModel {
             }
         }
 
+        // Verificar bloque 3x2
         int blockStartRow = (row / BLOCK_HEIGHT) * BLOCK_HEIGHT;
         int blockStartCol = (col / BLOCK_WIDTH) * BLOCK_WIDTH;
 
@@ -141,14 +326,13 @@ public class SudokuModel {
             return false;
         }
 
-        //permite operaciones que borran numeros, osea que su valor es 0
         if (value == 0) {
             grid[row][col] = 0;
             errorCells[row][col] = false;
             return true;
         }
 
-        if (value < MIN_VALUE || value > MAX_VALUE) {//programacion defensiva, redundante
+        if (value < MIN_VALUE || value > MAX_VALUE) {
             return false;
         }
 
@@ -166,6 +350,7 @@ public class SudokuModel {
             }
         }
 
+        // Validar filas
         for (int row = 0; row < GRID_SIZE; row++) {
             Set<Integer> seen = new HashSet<>();
             for (int col = 0; col < GRID_SIZE; col++) {
@@ -184,6 +369,7 @@ public class SudokuModel {
             }
         }
 
+        // Validar columnas
         for (int col = 0; col < GRID_SIZE; col++) {
             Set<Integer> seen = new HashSet<>();
             for (int row = 0; row < GRID_SIZE; row++) {
@@ -204,9 +390,9 @@ public class SudokuModel {
 
         // Validar bloques 3x2
         int[][] blockStarts = {
-                {0, 0}, {0, 3},  // Bloques superiores
-                {2, 0}, {2, 3},  // Bloques medios
-                {4, 0}, {4, 3}   // Bloques inferiores
+                {0, 0}, {0, 3},
+                {2, 0}, {2, 3},
+                {4, 0}, {4, 3}
         };
 
         for (int[] blockStart : blockStarts) {
@@ -216,8 +402,6 @@ public class SudokuModel {
             Set<Integer> seen = new HashSet<>();
             List<int[]> positions = new ArrayList<>();
 
-            // Recolectar valores del bloque 3x2
-            //+2 y +3 porque cada bloque va hasta +2 filas y +3 columnas
             for (int r = startRow; r < startRow + 2; r++) {
                 for (int c = startCol; c < startCol + 3; c++) {
                     int value = grid[r][c];
@@ -227,11 +411,9 @@ public class SudokuModel {
                 }
             }
 
-            // Buscar duplicados en el bloque
             for (int[] pos : positions) {
                 int value = pos[2];
                 if (seen.contains(value)) {
-                    // Marcar TODAS las celdas con este valor en el bloque
                     for (int[] p : positions) {
                         if (p[2] == value) {
                             errorCells[p[0]][p[1]] = true;
@@ -347,8 +529,6 @@ public class SudokuModel {
         }
         return Duration.between(startTime, Instant.now());
     }
-
-
 
     @Override
     public String toString() {
