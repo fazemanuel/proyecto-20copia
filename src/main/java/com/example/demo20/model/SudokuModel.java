@@ -14,6 +14,7 @@ public class SudokuModel {
     private static final int MAX_SELECTION_ATTEMPTS = 500;
 
     private int[][] grid;
+    //hola
     private int[][] solutionGrid; // Guardar la solución completa
     private boolean[][] initialCells;
     private boolean[][] errorCells;
